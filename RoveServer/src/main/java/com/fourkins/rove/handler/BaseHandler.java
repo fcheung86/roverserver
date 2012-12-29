@@ -14,12 +14,12 @@ public abstract class BaseHandler {
 
     }
 
-    protected Response buildNotFoundResponse() {
-        return Response.status(Status.NOT_FOUND).build();
+    protected Response buildResponse(Status status) {
+        return Response.status(status).build();
     }
 
-    protected Response buildJsonOKResponse(Object object) {
-        return Response.status(Status.OK).entity(gson.toJson(object)).build();
+    protected Response buildJsonResponse(Status status, Object object) {
+        return Response.status(status).entity(gson.toJson(object)).build();
     }
 
 }

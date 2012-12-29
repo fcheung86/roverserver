@@ -4,6 +4,7 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
 
 import com.fourkins.rove.post.Post;
 import com.fourkins.rove.provider.PostProvider;
@@ -22,9 +23,9 @@ public class PostHandler extends BaseHandler {
         Post post = PostProvider.getInstance().getPost(postId);
 
         if (post != null) {
-            return buildJsonOKResponse(post);
+            return buildJsonResponse(Status.OK, post);
         } else {
-            return buildNotFoundResponse();
+            return buildResponse(Status.NOT_FOUND);
         }
     }
 }

@@ -24,8 +24,7 @@ public abstract class BaseProvider {
         return conn;
     }
 
-    protected void releaseConnection(Connection conn, Statement st, ResultSet rs)
-            throws SQLException {
+    protected void releaseConnection(Connection conn, Statement st, ResultSet rs) throws SQLException {
         if (rs != null) {
             rs.close();
         }

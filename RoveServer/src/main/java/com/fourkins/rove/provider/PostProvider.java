@@ -14,11 +14,13 @@ public class PostProvider extends BaseProvider {
     private static final PostProvider INSTANCE = new PostProvider();
 
     //@formatter:off
-        private static final String GET_POST_BY_ID = 
-                "SELECT post_id, user_id, latitude, longitude, message, timestamp " + 
-                "  FROM posts " + 
-                " WHERE post_id = ?";
-        //@formatter:on
+    private static final String GET_POST_BY_ID = 
+            "SELECT post_id, user_id, latitude, longitude, message, timestamp " + 
+            "  FROM posts " + 
+            " WHERE post_id = ?";
+    //@formatter:on
+
+    private static final Logger LOGGER = Logger.getLogger(PostProvider.class.getName());
 
     private PostProvider() {
         super();
@@ -53,15 +55,13 @@ public class PostProvider extends BaseProvider {
             }
 
         } catch (SQLException e) {
-            Logger logger = Logger.getLogger(PostProvider.class.getName());
-            logger.log(Level.SEVERE, e.getMessage(), e);
+            LOGGER.log(Level.SEVERE, e.getMessage(), e);
 
         } finally {
             try {
                 releaseConnection(conn, ps, rs);
             } catch (SQLException e) {
-                Logger logger = Logger.getLogger(PostProvider.class.getName());
-                logger.log(Level.SEVERE, e.getMessage(), e);
+                LOGGER.log(Level.SEVERE, e.getMessage(), e);
             }
         }
 

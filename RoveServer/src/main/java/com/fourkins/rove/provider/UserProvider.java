@@ -8,17 +8,28 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import com.fourkins.rove.user.User;
+import com.fourkins.rove.user.UserAlreadyExistException;
+import com.mysql.jdbc.MysqlErrorNumbers;
 
 public class UserProvider extends BaseProvider {
 
     private static final UserProvider INSTANCE = new UserProvider();
 
     //@formatter:off
-    private static final String GET_USER_BY_ID = 
+    private static final String GET_USER = 
             "SELECT user_id, name, email " + 
-            "  FROM users " + 
-            " WHERE user_id = ?";
+            "  FROM users ";
+    
+    private static final String GET_USER_BY_ID = GET_USER + " WHERE user_id = ? ";
+    
+    private static final String GET_USER_BY_EMAIL = GET_USER + " WHERE email = ? ";
+    
+    private static final String ADD_USER =
+            "INSERT INTO users (name, email) " +
+            "VALUES (?, ?) "; 
     //@formatter:on
+
+    private static final Logger LOGGER = Logger.getLogger(UserProvider.class.getName());
 
     private UserProvider() {
         super();
@@ -28,7 +39,7 @@ public class UserProvider extends BaseProvider {
         return INSTANCE;
     }
 
-    public User getUser(int userId) {
+    public User getUserById(int userId) {
         User user = null;
 
         Connection conn = null;
@@ -50,18 +61,92 @@ public class UserProvider extends BaseProvider {
             }
 
         } catch (SQLException e) {
-            Logger logger = Logger.getLogger(UserProvider.class.getName());
-            logger.log(Level.SEVERE, e.getMessage(), e);
+            LOGGER.log(Level.SEVERE, e.getMessage(), e);
 
         } finally {
             try {
                 releaseConnection(conn, ps, rs);
             } catch (SQLException e) {
-                Logger logger = Logger.getLogger(UserProvider.class.getName());
-                logger.log(Level.SEVERE, e.getMessage(), e);
+                LOGGER.log(Level.SEVERE, e.getMessage(), e);
             }
         }
 
         return user;
+    }
+
+    public User getUserByEmail(String email) {
+        User user = null;
+
+        Connection conn = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+
+        try {
+            conn = acquireConnection();
+
+            ps = conn.prepareStatement(GET_USER_BY_EMAIL);
+            ps.setString(1, email);
+
+            rs = ps.executeQuery();
+            if (rs.next()) {
+                user = new User();
+                user.setUserId(rs.getInt(1));
+                user.setName(rs.getString(2));
+                user.setEmail(rs.getString(3));
+            }
+
+        } catch (SQLException e) {
+            LOGGER.log(Level.SEVERE, e.getMessage(), e);
+
+        } finally {
+            try {
+                releaseConnection(conn, ps, rs);
+            } catch (SQLException e) {
+                LOGGER.log(Level.SEVERE, e.getMessage(), e);
+            }
+        }
+
+        return user;
+    }
+
+    public User addUser(User user) throws UserAlreadyExistException {
+        User addedUser = null;
+
+        Connection conn = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+
+        try {
+            conn = acquireConnection();
+
+            ps = conn.prepareStatement(ADD_USER);
+            ps.setString(1, user.getName());
+            ps.setString(2, user.getEmail());
+
+            int rowCount = ps.executeUpdate();
+            if (rowCount == 1) {
+                // user was added successfully, try to get the user object again by the email and return it
+                addedUser = getUserByEmail((user.getEmail()));
+            }
+
+        } catch (SQLException e) {
+            if (e.getErrorCode() == MysqlErrorNumbers.ER_DUP_ENTRY) {
+                // this user already exist with this email, log this error and throw exception to be handled by the
+                // caller
+                LOGGER.log(Level.WARNING, "User already exist with email=" + user.getEmail());
+                throw new UserAlreadyExistException();
+            } else {
+                LOGGER.log(Level.SEVERE, e.getMessage(), e);
+            }
+
+        } finally {
+            try {
+                releaseConnection(conn, ps, rs);
+            } catch (SQLException e) {
+                LOGGER.log(Level.SEVERE, e.getMessage(), e);
+            }
+        }
+
+        return addedUser;
     }
 }
