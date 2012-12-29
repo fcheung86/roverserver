@@ -6,8 +6,7 @@ Download the following
 ----------------------
 1. Jetty Eclipse Plugin - http://run-jetty-run.googlecode.com/svn/trunk/updatesite
 2. Maven - http://apache.sunsite.ualberta.ca/maven/maven-3/3.0.4/binaries/apache-maven-3.0.4-bin.zip
-3. MySQL - http://www.mysql.com/downloads/mysql/
-4. MySQL Workbench (GUI Tool) [Optional] - http://www.mysql.com/downloads/workbench/
+3. MySQL - http://dev.mysql.com/downloads/installer/5.5.html
 
 
 
@@ -43,9 +42,21 @@ option listed, if you see it, that means it's installed already, if not, proceed
 4. Install Maven Integration for Eclipse
 
 
-Installing MySQL/Workbench
+Installing MySQL
 --------------------------
-// TODO
+1. Install using the downloaded installer
+2. When "Choosing a Setup Type", select "Custom"
+3. Select all of "MySQL Server 5..5.x"
+4. Select just "MySQL Workbench CE 5.x.x"
+5. Use default configurations
+6. Set the root password
+7. Add User, Username = rove, Password = passw0rd
+8. Leave the rest to their default settings
+9. MySQL Workbench should be started, select "Local instance MySQL55" on the left
+10. Delete the "test" schema
+11. Create new schema "rove"
+12. Open \database\create_tables.sql and execute the script to create the tables
+13. 
 
 
 Running RoveServer

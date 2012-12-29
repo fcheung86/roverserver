@@ -45,7 +45,7 @@ public class UserProvider extends BaseProvider {
             if (rs.next()) {
                 user = new User();
                 user.setUserId(rs.getInt(1));
-                user.setName(rs.getString(1));
+                user.setName(rs.getString(2));
                 user.setEmail(rs.getString(3));
             }
 

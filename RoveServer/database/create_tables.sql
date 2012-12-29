@@ -4,7 +4,7 @@ CREATE TABLE `users` (
   `email` varchar(45) NOT NULL,
   PRIMARY KEY (`user_id`),
   UNIQUE KEY `email_UNIQUE` (`email`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1$$
+) ENGINE=InnoDB AUTO_INCREMENT=2
 ;
 
 CREATE TABLE `posts` (
@@ -17,5 +17,5 @@ CREATE TABLE `posts` (
   PRIMARY KEY (`post_id`),
   KEY `posts-user_id_idx` (`user_id`),
   CONSTRAINT `posts-user_id` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1$$
+) ENGINE=InnoDB AUTO_INCREMENT=2
 ;
