@@ -56,7 +56,7 @@ Installing MySQL
 10. Delete the "test" schema
 11. Create new schema "rove"
 12. Open \database\create_tables.sql and execute the script to create the tables
-13. 
+13. Open \database\populate_tables.sql and execute the script to populate the tables
 
 
 Running RoveServer
