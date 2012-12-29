@@ -33,6 +33,16 @@ Installing Maven
 4. Go to command prompt and verify Maven is installed by running "mvn --version"
 
 
+Installing Maven Eclipse Plugin [Might not be needed]
+-------------------------------
+Note: Your Eclipse might have the plugin installed already, you can check by right clicking on the RoveServer project and see if there is an "Maven" 
+option listed, if you see it, that means it's installed already, if not, proceed with the following:
+1. Help > Install New Software...
+2. Add...
+3. Name = Maven Plugin, Location = http://download.eclipse.org/technology/m2e/releases
+4. Install Maven Integration for Eclipse
+
+
 Installing MySQL/Workbench
 --------------------------
 // TODO
@@ -40,7 +50,8 @@ Installing MySQL/Workbench
 
 Running RoveServer
 ------------------
-1. If everything is installed correctly, the project should build without a problem after importing from bitbucket
+1. If everything is installed correctly, the project should build without a problem after importing from bitbucket, if there are build problems, make
+   sure the Maven Eclipse Plugin is installed. (Check above for specific instructions)
 2. Open com.fourkins.rove.handler.PostHandler.java
 3. Set a breakpoint on Line22 (Post post = PostProvider.getInstance().getPost(postId);)
 4. Right click on the RoveServer Project > Debug As > Run Jetty
