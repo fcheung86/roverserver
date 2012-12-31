@@ -18,9 +18,14 @@ public class PostProvider extends BaseProvider {
             "SELECT post_id, user_id, latitude, longitude, message, timestamp " + 
             "  FROM posts " + 
             " WHERE post_id = ?";
+    
+    private static final String ADD_POST = 
+            "INSERT INTO posts (user_id, latitude, longitude, message) " +
+            "VALUES (?, ?, ?, ?) ";
     //@formatter:on
 
-    private static final Logger LOGGER = Logger.getLogger(PostProvider.class.getName());
+    private static final Logger LOGGER = Logger.getLogger(PostProvider.class
+            .getName());
 
     private PostProvider() {
         super();
@@ -66,6 +71,41 @@ public class PostProvider extends BaseProvider {
         }
 
         return post;
+    }
+
+    public boolean addPost(Post post) {
+        boolean success = false;
+
+        Connection conn = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+
+        try {
+            conn = acquireConnection();
+
+            ps = conn.prepareStatement(ADD_POST);
+            ps.setInt(1, post.getUserId());
+            ps.setDouble(2, post.getLatitude());
+            ps.setDouble(3, post.getLongitude());
+            ps.setString(4, post.getMessage());
+
+            int rowCount = ps.executeUpdate();
+            if (rowCount == 1) {
+                success = true;
+            }
+
+        } catch (SQLException e) {
+            LOGGER.log(Level.SEVERE, e.getMessage(), e);
+
+        } finally {
+            try {
+                releaseConnection(conn, ps, rs);
+            } catch (SQLException e) {
+                LOGGER.log(Level.SEVERE, e.getMessage(), e);
+            }
+        }
+
+        return success;
     }
 
 }
