@@ -1,5 +1,8 @@
 package com.fourkins.rove.handler;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -21,6 +24,8 @@ public class UserHandler extends BaseHandler {
 
     private static final UserProvider PROVIDER = UserProvider.getInstance();
 
+    private static final Logger LOGGER = Logger.getLogger(UserHandler.class.getName());
+
     public UserHandler() {
         super();
     }
@@ -29,6 +34,9 @@ public class UserHandler extends BaseHandler {
     @Path("/{user-id}")
     @Produces(MediaType.TEXT_PLAIN)
     public Response getUser(@PathParam("user-id") int userId) {
+
+        LOGGER.log(Level.INFO, "getUser() - userId=" + userId);
+
         User user = PROVIDER.getUserById(userId);
 
         if (user != null) {
@@ -41,6 +49,8 @@ public class UserHandler extends BaseHandler {
     @GET
     @Produces(MediaType.TEXT_PLAIN)
     public Response verifyUser(@QueryParam("email") String email, @QueryParam("password") String password) {
+
+        LOGGER.log(Level.INFO, "verifyUser() - email=" + email + ",password=" + password);
 
         // check if email and passwords are empty or null
         if (email == null || email.isEmpty()) {
@@ -73,6 +83,9 @@ public class UserHandler extends BaseHandler {
     @Consumes(MediaType.TEXT_PLAIN)
     @Produces(MediaType.TEXT_PLAIN)
     public Response addUser(String json) {
+
+        LOGGER.log(Level.INFO, "addUser() - json=" + json);
+
         User user = gson.fromJson(json, User.class);
 
         // return "BAD REQUEST 400" if we can't parse the user

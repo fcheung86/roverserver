@@ -15,8 +15,7 @@ public class Post {
 
     }
 
-    public Post(int postId, int userId, double latitude, double longitude,
-            String message, long timestamp) {
+    public Post(int postId, int userId, double latitude, double longitude, String message, long timestamp) {
         super();
         this.postId = postId;
         this.userId = userId;
