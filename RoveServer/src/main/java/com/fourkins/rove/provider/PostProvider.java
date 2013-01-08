@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -21,13 +22,18 @@ public class PostProvider extends BaseProvider {
             "  FROM posts " + 
             " WHERE post_id = ?";
     
-    private static final String GET_POSTS_BY_DISTANCE = 
+    private static final String GET_POSTS = 
             "SELECT post_id, user_id, latitude, longitude, message, timestamp " + 
             "  FROM posts " + 
             " WHERE latitude > ? " +
             "   AND latitude < ? " +
             "   AND longitude > ? " +
-            "   AND longitude < ? ";
+            "   AND longitude < ? " +
+            "   AND timestamp < ? " +
+            " ORDER BY ";
+    
+    private static final String LIMIT_SIZE = 
+            " LIMIT ? ";
     
     private static final String ADD_POST = 
             "INSERT INTO posts (user_id, latitude, longitude, message) " +
@@ -82,7 +88,7 @@ public class PostProvider extends BaseProvider {
         return post;
     }
 
-    public List<Post> getPostsByDistance(double lat1, double lng1, double lat2, double lng2) {
+    public List<Post> getPosts(double lat1, double lng1, double lat2, double lng2, long time, int size, String sort) {
         List<Post> posts = new ArrayList<Post>();
 
         Connection conn = null;
@@ -92,11 +98,20 @@ public class PostProvider extends BaseProvider {
         try {
             conn = acquireConnection();
 
-            ps = conn.prepareStatement(GET_POSTS_BY_DISTANCE);
+            // build SQL
+            String SQL = GET_POSTS;
+            if (sort.equalsIgnoreCase("time")) {
+                SQL += " timestamp DESC ";
+            }
+            SQL += LIMIT_SIZE;
+
+            ps = conn.prepareStatement(SQL);
             ps.setDouble(1, lat1);
             ps.setDouble(2, lat2);
             ps.setDouble(3, lng1);
             ps.setDouble(4, lng2);
+            ps.setTimestamp(5, new Timestamp(time));
+            ps.setInt(6, size);
 
             rs = ps.executeQuery();
             while (rs.next()) {
