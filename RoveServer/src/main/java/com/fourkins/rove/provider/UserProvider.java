@@ -17,7 +17,7 @@ public class UserProvider extends BaseProvider {
 
     //@formatter:off
     private static final String GET_USER = 
-            "SELECT user_id, name, email " + 
+            "SELECT user_id, username, real_name, email " + 
             "  FROM users ";
     
     private static final String GET_USER_BY_ID = GET_USER + " WHERE user_id = ? ";
@@ -31,8 +31,8 @@ public class UserProvider extends BaseProvider {
             "   AND password = ? ";
     
     private static final String ADD_USER =
-            "INSERT INTO users (name, email, password) " +
-            "VALUES (?, ?, ?) "; 
+            "INSERT INTO users (username, real_name, email, password) " +
+            "VALUES (?, ?, ?, ?) "; 
     //@formatter:on
 
     private static final Logger LOGGER = Logger.getLogger(UserProvider.class.getName());
@@ -62,8 +62,9 @@ public class UserProvider extends BaseProvider {
             if (rs.next()) {
                 user = new User();
                 user.setUserId(rs.getInt(1));
-                user.setName(rs.getString(2));
-                user.setEmail(rs.getString(3));
+                user.setUsername(rs.getString(2));
+                user.setRealName(rs.getString(3));
+                user.setEmail(rs.getString(4));
             }
 
         } catch (SQLException e) {
@@ -97,8 +98,9 @@ public class UserProvider extends BaseProvider {
             if (rs.next()) {
                 user = new User();
                 user.setUserId(rs.getInt(1));
-                user.setName(rs.getString(2));
-                user.setEmail(rs.getString(3));
+                user.setUsername(rs.getString(2));
+                user.setRealName(rs.getString(3));
+                user.setEmail(rs.getString(4));
             }
 
         } catch (SQLException e) {
@@ -161,9 +163,10 @@ public class UserProvider extends BaseProvider {
             conn = acquireConnection();
 
             ps = conn.prepareStatement(ADD_USER);
-            ps.setString(1, user.getName());
-            ps.setString(2, user.getEmail());
-            ps.setString(3, user.getPassword());
+            ps.setString(1, user.getUserName());
+            ps.setString(2, user.getRealName());
+            ps.setString(3, user.getEmail());
+            ps.setString(4, user.getPassword());
 
             int rowCount = ps.executeUpdate();
             if (rowCount == 1) {

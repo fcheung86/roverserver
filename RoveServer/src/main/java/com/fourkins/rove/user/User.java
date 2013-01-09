@@ -3,7 +3,8 @@ package com.fourkins.rove.user;
 public class User {
 
     private int userId;
-    private String name;
+    private String username;
+    private String realName;
     private String email;
     private String password;
 
@@ -11,9 +12,10 @@ public class User {
 
     }
 
-    public User(int userId, String name, String email, String password) {
+    public User(int userId, String username, String realName, String email, String password) {
         this.userId = userId;
-        this.name = name;
+        this.username = username;
+        this.realName = realName;
         this.email = email;
         this.password = password;
     }
@@ -26,12 +28,20 @@ public class User {
         this.userId = userId;
     }
 
-    public String getName() {
-        return name;
+    public String getUserName() {
+        return username;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getRealName() {
+        return realName;
+    }
+
+    public void setRealName(String realName) {
+        this.realName = realName;
     }
 
     public String getEmail() {
