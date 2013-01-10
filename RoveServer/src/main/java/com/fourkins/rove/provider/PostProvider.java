@@ -71,7 +71,7 @@ public class PostProvider extends BaseProvider {
 
                 post.setPostId(rs.getInt(1));
                 post.setUserId(rs.getInt(2));
-                post.setUserName(rs.getString(3));
+                post.setUsername(rs.getString(3));
                 post.setLatitude(rs.getDouble(4));
                 post.setLongitude(rs.getDouble(5));
                 post.setMessage(rs.getString(6));
@@ -123,7 +123,7 @@ public class PostProvider extends BaseProvider {
 
                 post.setPostId(rs.getInt(1));
                 post.setUserId(rs.getInt(2));
-                post.setUserName(rs.getString(3));
+                post.setUsername(rs.getString(3));
                 post.setLatitude(rs.getDouble(4));
                 post.setLongitude(rs.getDouble(5));
                 post.setMessage(rs.getString(6));
