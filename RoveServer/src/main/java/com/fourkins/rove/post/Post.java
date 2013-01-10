@@ -4,7 +4,7 @@ public class Post {
 
     private int postId;
     private int userId;
-    private String userName;
+    private String username;
     private double latitude;
     private double longitude;
     private String message;
@@ -41,11 +41,11 @@ public class Post {
     }
 
     public String getUserName() {
-        return userName;
+        return username;
     }
 
     public void setUserName(String userName) {
-        this.userName = userName;
+        this.username = userName;
     }
 
     public double getLatitude() {
