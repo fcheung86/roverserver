@@ -18,18 +18,20 @@ public class PostProvider extends BaseProvider {
 
     //@formatter:off
     private static final String GET_POST_BY_ID = 
-            "SELECT post_id, user_id, latitude, longitude, message, timestamp " + 
-            "  FROM posts " + 
-            " WHERE post_id = ?";
+            "SELECT p.post_id, u.user_id, u.username, p.latitude, p.longitude, p.message, p.timestamp " + 
+            "  FROM posts p, users u" + 
+            " WHERE p.user_id = u.user_id " +
+            "   AND post_id = ?";
     
     private static final String GET_POSTS = 
-            "SELECT post_id, user_id, latitude, longitude, message, timestamp " + 
-            "  FROM posts " + 
-            " WHERE latitude > ? " +
-            "   AND latitude < ? " +
-            "   AND longitude > ? " +
-            "   AND longitude < ? " +
-            "   AND timestamp < ? " +
+            "SELECT p.post_id, u.user_id, u.username, p.latitude, p.longitude, p.message, p.timestamp " + 
+            "  FROM posts p, users u" + 
+            " WHERE p.user_id = u.user_id " +
+            "   AND p.latitude > ? " +
+            "   AND p.latitude < ? " +
+            "   AND p.longitude > ? " +
+            "   AND p.longitude < ? " +
+            "   AND p.timestamp < ? " +
             " ORDER BY ";
     
     private static final String LIMIT_SIZE = 
@@ -66,12 +68,14 @@ public class PostProvider extends BaseProvider {
             rs = ps.executeQuery();
             if (rs.next()) {
                 post = new Post();
+
                 post.setPostId(rs.getInt(1));
                 post.setUserId(rs.getInt(2));
-                post.setLatitude(rs.getDouble(3));
-                post.setLongitude(rs.getDouble(4));
-                post.setMessage(rs.getString(5));
-                post.setTimestamp(rs.getTimestamp(6).getTime());
+                post.setUserName(rs.getString(3));
+                post.setLatitude(rs.getDouble(4));
+                post.setLongitude(rs.getDouble(5));
+                post.setMessage(rs.getString(6));
+                post.setTimestamp(rs.getTimestamp(7).getTime());
             }
 
         } catch (SQLException e) {
@@ -101,7 +105,7 @@ public class PostProvider extends BaseProvider {
             // build SQL
             String SQL = GET_POSTS;
             if (sort.equalsIgnoreCase("time")) {
-                SQL += " timestamp DESC ";
+                SQL += " p.timestamp DESC ";
             }
             SQL += LIMIT_SIZE;
 
@@ -119,10 +123,11 @@ public class PostProvider extends BaseProvider {
 
                 post.setPostId(rs.getInt(1));
                 post.setUserId(rs.getInt(2));
-                post.setLatitude(rs.getDouble(3));
-                post.setLongitude(rs.getDouble(4));
-                post.setMessage(rs.getString(5));
-                post.setTimestamp(rs.getTimestamp(6).getTime());
+                post.setUserName(rs.getString(3));
+                post.setLatitude(rs.getDouble(4));
+                post.setLongitude(rs.getDouble(5));
+                post.setMessage(rs.getString(6));
+                post.setTimestamp(rs.getTimestamp(7).getTime());
 
                 posts.add(post);
             }

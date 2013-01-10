@@ -1,15 +1,14 @@
 package com.fourkins.rove.post;
 
-import java.util.Date;
-
 public class Post {
 
     private int postId;
     private int userId;
+    private String userName;
     private double latitude;
     private double longitude;
     private String message;
-    private Date timestamp;
+    private long timestamp;
 
     public Post() {
 
@@ -22,7 +21,7 @@ public class Post {
         this.latitude = latitude;
         this.longitude = longitude;
         this.message = message;
-        this.timestamp = new Date(timestamp);
+        this.timestamp = timestamp;
     }
 
     public int getPostId() {
@@ -39,6 +38,14 @@ public class Post {
 
     public void setUserId(int userId) {
         this.userId = userId;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 
     public double getLatitude() {
@@ -65,11 +72,11 @@ public class Post {
         this.message = message;
     }
 
-    public Date getTimestamp() {
+    public long getTimestamp() {
         return timestamp;
     }
 
     public void setTimestamp(long timestamp) {
-        this.timestamp = new Date(timestamp);
+        this.timestamp = timestamp;
     }
 }
