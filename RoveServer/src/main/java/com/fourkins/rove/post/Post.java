@@ -8,20 +8,12 @@ public class Post {
     private double latitude;
     private double longitude;
     private String message;
+    private String address;
+    private String city;
     private long timestamp;
 
     public Post() {
 
-    }
-
-    public Post(int postId, int userId, double latitude, double longitude, String message, long timestamp) {
-        super();
-        this.postId = postId;
-        this.userId = userId;
-        this.latitude = latitude;
-        this.longitude = longitude;
-        this.message = message;
-        this.timestamp = timestamp;
     }
 
     public int getPostId() {
@@ -70,6 +62,22 @@ public class Post {
 
     public void setMessage(String message) {
         this.message = message;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
     }
 
     public long getTimestamp() {

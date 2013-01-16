@@ -18,13 +18,13 @@ public class PostProvider extends BaseProvider {
 
     //@formatter:off
     private static final String GET_POST_BY_ID = 
-            "SELECT p.post_id, u.user_id, u.username, p.latitude, p.longitude, p.message, p.timestamp " + 
+            "SELECT p.post_id, u.user_id, u.username, p.latitude, p.longitude, p.message, p.address, p.city, p.timestamp " + 
             "  FROM posts p, users u" + 
             " WHERE p.user_id = u.user_id " +
             "   AND post_id = ?";
     
     private static final String GET_POSTS = 
-            "SELECT p.post_id, u.user_id, u.username, p.latitude, p.longitude, p.message, p.timestamp " + 
+            "SELECT p.post_id, u.user_id, u.username, p.latitude, p.longitude, p.message, p.address, p.city, p.timestamp " + 
             "  FROM posts p, users u" + 
             " WHERE p.user_id = u.user_id " +
             "   AND p.latitude > ? " +
@@ -38,8 +38,8 @@ public class PostProvider extends BaseProvider {
             " LIMIT ? ";
     
     private static final String ADD_POST = 
-            "INSERT INTO posts (user_id, latitude, longitude, message) " +
-            "VALUES (?, ?, ?, ?) ";
+            "INSERT INTO posts (user_id, latitude, longitude, message, address, city) " +
+            "VALUES (?, ?, ?, ?, ?, ?) ";
     //@formatter:on
 
     private static final Logger LOGGER = Logger.getLogger(PostProvider.class.getName());
@@ -75,7 +75,9 @@ public class PostProvider extends BaseProvider {
                 post.setLatitude(rs.getDouble(4));
                 post.setLongitude(rs.getDouble(5));
                 post.setMessage(rs.getString(6));
-                post.setTimestamp(rs.getTimestamp(7).getTime());
+                post.setAddress(rs.getString(7));
+                post.setCity(rs.getString(8));
+                post.setTimestamp(rs.getTimestamp(9).getTime());
             }
 
         } catch (SQLException e) {
@@ -127,7 +129,9 @@ public class PostProvider extends BaseProvider {
                 post.setLatitude(rs.getDouble(4));
                 post.setLongitude(rs.getDouble(5));
                 post.setMessage(rs.getString(6));
-                post.setTimestamp(rs.getTimestamp(7).getTime());
+                post.setAddress(rs.getString(7));
+                post.setCity(rs.getString(8));
+                post.setTimestamp(rs.getTimestamp(9).getTime());
 
                 posts.add(post);
             }
@@ -161,6 +165,8 @@ public class PostProvider extends BaseProvider {
             ps.setDouble(2, post.getLatitude());
             ps.setDouble(3, post.getLongitude());
             ps.setString(4, post.getMessage());
+            ps.setString(5, post.getAddress());
+            ps.setString(6, post.getCity());
 
             int rowCount = ps.executeUpdate();
             if (rowCount == 1) {
