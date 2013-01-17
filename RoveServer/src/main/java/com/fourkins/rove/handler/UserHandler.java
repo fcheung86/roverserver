@@ -10,9 +10,12 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
+import javax.ws.rs.core.UriInfo;
 
 import com.fourkins.rove.ResultCode;
 import com.fourkins.rove.provider.UserProvider;
@@ -47,6 +50,34 @@ public class UserHandler extends BaseHandler {
     }
 
     @GET
+    @Produces(MediaType.TEXT_PLAIN)
+    public Response getUserByParm(@Context UriInfo uriInfo) {
+
+        MultivaluedMap<String, String> params = uriInfo.getQueryParameters();
+
+        // get the latitude and longitude parameters
+        String username = getString(params, "username");
+        String email = getString(params, "email");
+        // Double lng = getDouble(params, "lng");
+
+        User user;
+        if (username != null) {
+            user = PROVIDER.getUserByUsername(username);
+        } else if (email != null) {
+            user = PROVIDER.getUserByEmail(email);
+        } else {
+            return buildResponse(Status.NOT_FOUND);
+        }
+
+        if (user != null) {
+            return buildJsonResponse(Status.OK, user);
+        } else {
+            return buildResponse(Status.NOT_FOUND);
+        }
+    }
+
+    @GET
+    @Path("/verify")
     @Produces(MediaType.TEXT_PLAIN)
     public Response verifyUser(@QueryParam("email") String email, @QueryParam("password") String password) {
 

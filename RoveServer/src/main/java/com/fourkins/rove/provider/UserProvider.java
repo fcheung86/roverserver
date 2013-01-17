@@ -17,12 +17,14 @@ public class UserProvider extends BaseProvider {
 
     //@formatter:off
     private static final String GET_USER = 
-            "SELECT user_id, username, real_name, email " + 
+            "SELECT user_id, username, real_name, email, salt " + 
             "  FROM users ";
     
     private static final String GET_USER_BY_ID = GET_USER + " WHERE user_id = ? ";
     
     private static final String GET_USER_BY_EMAIL = GET_USER + " WHERE email = ? ";
+    
+    private static final String GET_USER_BY_USERNAME = GET_USER + " WHERE username = ? ";
     
     private static final String IS_VALID_USER = 
             "SELECT COUNT(*) " +
@@ -31,8 +33,8 @@ public class UserProvider extends BaseProvider {
             "   AND password = ? ";
     
     private static final String ADD_USER =
-            "INSERT INTO users (username, real_name, email, password) " +
-            "VALUES (?, ?, ?, ?) "; 
+            "INSERT INTO users (username, real_name, email, password, salt, created_on, updated_on) " +
+            "VALUES (?, ?, ?, ?, ?, now(), now()) "; 
     //@formatter:on
 
     private static final Logger LOGGER = Logger.getLogger(UserProvider.class.getName());
@@ -65,6 +67,7 @@ public class UserProvider extends BaseProvider {
                 user.setUsername(rs.getString(2));
                 user.setRealName(rs.getString(3));
                 user.setEmail(rs.getString(4));
+                user.setSalt(rs.getString(5));
             }
 
         } catch (SQLException e) {
@@ -101,6 +104,44 @@ public class UserProvider extends BaseProvider {
                 user.setUsername(rs.getString(2));
                 user.setRealName(rs.getString(3));
                 user.setEmail(rs.getString(4));
+                user.setSalt(rs.getString(5));
+            }
+
+        } catch (SQLException e) {
+            LOGGER.log(Level.SEVERE, e.getMessage(), e);
+
+        } finally {
+            try {
+                releaseConnection(conn, ps, rs);
+            } catch (SQLException e) {
+                LOGGER.log(Level.SEVERE, e.getMessage(), e);
+            }
+        }
+
+        return user;
+    }
+
+    public User getUserByUsername(String username) {
+        User user = null;
+
+        Connection conn = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+
+        try {
+            conn = acquireConnection();
+
+            ps = conn.prepareStatement(GET_USER_BY_USERNAME);
+            ps.setString(1, username);
+
+            rs = ps.executeQuery();
+            if (rs.next()) {
+                user = new User();
+                user.setUserId(rs.getInt(1));
+                user.setUsername(rs.getString(2));
+                user.setRealName(rs.getString(3));
+                user.setEmail(rs.getString(4));
+                user.setSalt(rs.getString(5));
             }
 
         } catch (SQLException e) {
@@ -167,6 +208,7 @@ public class UserProvider extends BaseProvider {
             ps.setString(2, user.getRealName());
             ps.setString(3, user.getEmail());
             ps.setString(4, user.getPassword());
+            ps.setString(5, user.getSalt());
 
             int rowCount = ps.executeUpdate();
             if (rowCount == 1) {

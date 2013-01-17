@@ -3,7 +3,10 @@ CREATE TABLE `users` (
   `username` varchar(45) NOT NULL,
   `real_name` varchar(45) NOT NULL,
   `email` varchar(45) NOT NULL,
-  `password` varchar(45) NOT NULL,
+  `password` varchar(256) NOT NULL,
+  `salt` varchar(45) NOT NULL,
+  `created_on` datetime,
+  `updated_on` datetime,
   PRIMARY KEY (`user_id`),
   UNIQUE KEY `email_UNIQUE` (`email`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2
@@ -17,7 +20,6 @@ CREATE TABLE `posts` (
   `message` varchar(128) NOT NULL,
   `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`post_id`),
-  KEY `posts-user_id_idx` (`user_id`),
-  CONSTRAINT `posts-user_id` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+  KEY `posts-user_id_idx` (`user_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2
 ;
