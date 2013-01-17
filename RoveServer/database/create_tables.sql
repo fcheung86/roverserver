@@ -18,6 +18,8 @@ CREATE TABLE `posts` (
   `latitude` double NOT NULL,
   `longitude` double NOT NULL,
   `message` varchar(128) NOT NULL,
+  `address` varchar(128) NOT NULL,
+  `city` varchar(64) NOT NULL,
   `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`post_id`),
   KEY `posts-user_id_idx` (`user_id`)
