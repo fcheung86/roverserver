@@ -13,14 +13,6 @@ public class User {
 
     }
 
-    public User(int userId, String username, String realName, String email, String password) {
-        this.userId = userId;
-        this.username = username;
-        this.realName = realName;
-        this.email = email;
-        this.password = password;
-    }
-
     public int getUserId() {
         return userId;
     }
@@ -29,7 +21,7 @@ public class User {
         this.userId = userId;
     }
 
-    public String getUserName() {
+    public String getUsername() {
         return username;
     }
 

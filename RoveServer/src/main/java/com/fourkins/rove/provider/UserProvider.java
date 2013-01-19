@@ -204,7 +204,7 @@ public class UserProvider extends BaseProvider {
             conn = acquireConnection();
 
             ps = conn.prepareStatement(ADD_USER);
-            ps.setString(1, user.getUserName());
+            ps.setString(1, user.getUsername());
             ps.setString(2, user.getRealName());
             ps.setString(3, user.getEmail());
             ps.setString(4, user.getPassword());
