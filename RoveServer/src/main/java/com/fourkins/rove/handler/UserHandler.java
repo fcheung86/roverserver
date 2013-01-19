@@ -51,14 +51,12 @@ public class UserHandler extends BaseHandler {
 
     @GET
     @Produces(MediaType.TEXT_PLAIN)
-    public Response getUserByParm(@Context UriInfo uriInfo) {
+    public Response getUserByParam(@Context UriInfo uriInfo) {
 
         MultivaluedMap<String, String> params = uriInfo.getQueryParameters();
 
-        // get the latitude and longitude parameters
         String username = getString(params, "username");
         String email = getString(params, "email");
-        // Double lng = getDouble(params, "lng");
 
         User user;
         if (username != null) {
@@ -120,7 +118,8 @@ public class UserHandler extends BaseHandler {
         User user = gson.fromJson(json, User.class);
 
         // return "BAD REQUEST 400" if we can't parse the user
-        if (user == null || user.getEmail() == null || user.getUsername() == null || user.getRealName() == null || user.getPassword() == null) {
+        if (user == null || user.getEmail() == null || user.getUsername() == null || user.getRealName() == null
+                || user.getPassword() == null) {
             return buildResponse(Status.BAD_REQUEST);
         }
 
