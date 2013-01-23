@@ -96,8 +96,7 @@ public class UserHandler extends BaseHandler {
         }
 
         // this email/password is not valid, check to see if there's an existing
-        // account
-        // with this email
+        // account with this email
         User user = PROVIDER.getUserByEmail(email);
         if (user != null) {
             // this email exist, so the password must've been wrong
@@ -118,8 +117,7 @@ public class UserHandler extends BaseHandler {
         User user = gson.fromJson(json, User.class);
 
         // return "BAD REQUEST 400" if we can't parse the user
-        if (user == null || user.getEmail() == null || user.getUsername() == null || user.getRealName() == null
-                || user.getPassword() == null) {
+        if (user == null || user.getEmail() == null || user.getUsername() == null || user.getRealName() == null || user.getPassword() == null) {
             return buildResponse(Status.BAD_REQUEST);
         }
 

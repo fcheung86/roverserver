@@ -33,8 +33,8 @@ public class UserProvider extends BaseProvider {
             "   AND password = ? ";
     
     private static final String ADD_USER =
-            "INSERT INTO users (username, real_name, email, password, salt, created_on, updated_on) " +
-            "VALUES (?, ?, ?, ?, ?, now(), now()) "; 
+            "INSERT INTO users (username, real_name, email, password, salt, created) " +
+            "VALUES (?, ?, ?, ?, ?, now()) "; 
     //@formatter:on
 
     private static final Logger LOGGER = Logger.getLogger(UserProvider.class.getName());
