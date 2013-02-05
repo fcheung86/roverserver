@@ -29,7 +29,7 @@ CREATE TABLE `posts` (
 ;
 
 CREATE TABLE `comments` (
-  `comment_id` int(11) NOT NULL,
+  `comment_id` int(11) NOT NULL AUTO_INCREMENT,
   `post_id` int(11) NOT NULL,
   `user_id` int(11) NOT NULL,
   `comment` varchar(256) NOT NULL,
